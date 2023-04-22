@@ -4,25 +4,28 @@ import Image from "next/image";
 import { Inter } from "@next/font/google";
 import styles from "./page.module.css";
 import { useState } from "react";
-import ImageForm from "./form";
+import ImageForm from "./components/form";
+import LoadingSpinner from "./components/loadingSpinner";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export default function Home() {
-  const [generatedImage, setGeneratedImage] = useState(null);
-  const [generatedPrompt, setGeneratedPrompt] = useState(null);
+  const [generatedImage, setGeneratedImage] = useState("");
+  const [generatedPrompt, setGeneratedPrompt] = useState("");
   const [formKeywords, setFormKeywords] = useState("");
+  const [lockSubmit, setLockSubmit] = useState(false);
 
   const generateImage = async (keywords: string) => {
+    setLockSubmit(true);
     let genPromptToastId;
     let loadingToastId;
-    setFormKeywords(keywords);
     try {
       genPromptToastId = toast.info(
-        "Generating creative prompt for DALL-E...",
+        "Generating creative prompt for Midjourney...",
         {
           autoClose: false,
           closeOnClick: false,
@@ -30,32 +33,20 @@ export default function Home() {
       );
 
       const completionResponse = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+        "api/chat",
         {
-          model: "gpt-3.5-turbo",
-          temperature: 0.4,
-          messages: [
-            {
-              role: "system",
-              content:
-                "You are a DALL-E prompt engineer who, given some keywords, generate a creative description of an image, that will be given to DALL-E to generate.",
-            },
-            {
-              role: "user",
-              content: `From these simple keywords: '${keywords}', add some short image description: background, colors, angles, lighting, camera used, a style of art. Concise, two or three lines maximum`,
-            },
-          ],
-          max_tokens: 80,
+          prompt: keywords,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+            // Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
           },
         }
       );
 
-      setGeneratedPrompt(completionResponse.data.choices[0].message.content);
+      setGeneratedPrompt(completionResponse.data);
+      setFormKeywords(keywords);
 
       toast.dismiss(genPromptToastId);
       loadingToastId = toast.info("Generating image...", {
@@ -63,27 +54,53 @@ export default function Home() {
         closeOnClick: false,
       });
 
+      console.log("before call to api/imagen in page.ts");
+
       const response = await axios.post(
-        "https://api.openai.com/v1/images/generations",
+        "api/imagen",
         {
-          prompt: generatedPrompt,
-          size: "512x512",
+          prompt: completionResponse.data,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
+            // Authorization: `Bearer ${process.env.NEXT_PUBLIC_OPENAI_API_KEY}`,
           },
         }
       );
 
-      // Get image URL from the response
-      const imageUrl = response.data.data[0].url;
-      setGeneratedImage(imageUrl);
+      let getResponse;
+      while (1) {
+        getResponse = await axios.get(
+          `/api/getimage?id=${response.data.id}`,
+          {
+            headers: {
+              // "Content-Type": "application/json",
+              // Authorization: `Bearer ${process.env.NEXT_PUBLIC_REPLICATE_API_KEY}`,
+            },
+          }
+        );
+        console.log(getResponse.data.status);
+        if (getResponse.status !== 200) {
+          console.log("error here");
+          break;
+        }
+        else if (getResponse.data.status === "succeeded" || getResponse.data.status === "failed")
+          break;
+        await sleep(3000);
+      }
 
+      if (getResponse?.data.status === "succeeded") {
+        const imageUrl = getResponse.data.output[0];
+        setGeneratedImage(imageUrl);
+        toast.dismiss(loadingToastId);
+        toast.success("Image generated successfully!", { autoClose: 3000 });
+      } else {
+        console.log("failure");
+        toast.dismiss(loadingToastId);
+        toast.warning("Image not generated! Yet?", { autoClose: 3000 });
+      }
       // Dismiss the loading toast and show a success toast
-      toast.dismiss(loadingToastId);
-      toast.success("Image generated successfully!", { autoClose: 3000 });
     } catch (error) {
       console.error("Error generating image:", error);
       // Dismiss the loading toast and show an error toast
@@ -93,11 +110,12 @@ export default function Home() {
         autoClose: 3000,
       });
     }
+    setLockSubmit(false);
   };
 
   return (
     <main className={styles.main}>
-      <h1>AI Art Generator ft. GPT, DALLE-E</h1>
+      <h1>AI Art Generator ft. GPT, replicate/Openjourney</h1>
 
       {generatedImage ? (
         <>
@@ -118,8 +136,8 @@ export default function Home() {
             <button
               className={styles.regen}
               onClick={() => {
-                setGeneratedImage(null),
-                  setGeneratedPrompt(null),
+                setGeneratedImage(""),
+                  setGeneratedPrompt(""),
                   setFormKeywords("");
               }}
             >
@@ -136,8 +154,10 @@ export default function Home() {
             </button>
           </div>
         </>
-      ) : (
+      ) : lockSubmit === false ? (
         <ImageForm onSubmit={generateImage} />
+      ) : (
+        <LoadingSpinner />
       )}
       <ToastContainer position="bottom-center" />
     </main>
