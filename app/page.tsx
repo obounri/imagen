@@ -19,6 +19,16 @@ export default function Home() {
   const [formKeywords, setFormKeywords] = useState("");
   const [lockSubmit, setLockSubmit] = useState(false);
 
+  const downloadImage = () => {
+    toast.info("Downloading image...", { autoClose: 1500 });
+    const link = document.createElement("a");
+    link.href = `/api/proxy-image?url=${encodeURIComponent(generatedImage)}`;
+    link.download = "generated_art_prompt.png";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   const generateImage = async (keywords: string) => {
     setLockSubmit(true);
     let genPromptToastId;
@@ -71,21 +81,20 @@ export default function Home() {
 
       let getResponse;
       while (1) {
-        getResponse = await axios.get(
-          `/api/getimage?id=${response.data.id}`,
-          {
-            headers: {
-              // "Content-Type": "application/json",
-              // Authorization: `Bearer ${process.env.NEXT_PUBLIC_REPLICATE_API_KEY}`,
-            },
-          }
-        );
+        getResponse = await axios.get(`/api/getimage?id=${response.data.id}`, {
+          headers: {
+            // "Content-Type": "application/json",
+            // Authorization: `Bearer ${process.env.NEXT_PUBLIC_REPLICATE_API_KEY}`,
+          },
+        });
         console.log(getResponse.data.status);
         if (getResponse.status !== 200) {
           console.log("error here");
           break;
-        }
-        else if (getResponse.data.status === "succeeded" || getResponse.data.status === "failed")
+        } else if (
+          getResponse.data.status === "succeeded" ||
+          getResponse.data.status === "failed"
+        )
           break;
         await sleep(3000);
       }
@@ -114,6 +123,8 @@ export default function Home() {
   };
 
   return (
+    // <>
+    // <head />
     <main className={styles.main}>
       <h1>AI Art Generator ft. GPT, replicate/Openjourney</h1>
 
@@ -152,6 +163,9 @@ export default function Home() {
             >
               Regenerate
             </button>
+            <button className={styles.regen} onClick={downloadImage}>
+              Download Image
+            </button>
           </div>
         </>
       ) : lockSubmit === false ? (
@@ -161,6 +175,7 @@ export default function Home() {
       )}
       <ToastContainer position="bottom-center" />
     </main>
+    // </>
   );
 }
 // A crowd of moroccan feminist women fighting for women's rights in a public strike

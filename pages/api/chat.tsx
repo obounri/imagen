@@ -40,6 +40,14 @@ export default async function handler(
       },
       {
         role: "user",
+        content: `From these simple keywords: 'A big mosque hall with stained glasses', generate a short image description: background, colors, angles, lighting, camera used, a style of art. Concise, two or three lines maximum`,
+      },
+      {
+        role: "assistant",
+        content: `Wide-angle shot of a grand mosque hall, vibrant stained glass windows casting colorful lightnto the ornate marble floors, warm and inviting lighting, captured with a high-resolution DSLR camera, reminiscent of Islamic architecture found in the Middle East, inspired by Islamic geometric patterns.`,
+      },
+      {
+        role: "user",
         content: `From these simple keywords: '${req.body.prompt}', generate a short image description: background, colors, angles, lighting, camera used, a style of art. Concise, two or three lines maximum`,
       },
     ],
