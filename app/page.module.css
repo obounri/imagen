@@ -17,7 +17,7 @@
   padding: 3rem;
   min-height: 50vh;
   margin-top: 3rem;
-  /* border: 1px solid red; */
+  /* border: 1px solid green; */
 }
 
 .generatedPrompt {
@@ -55,4 +55,44 @@
   width: 60%;
   margin-top: 1rem;
   /* border: 1px solid red; */
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  /* border: 1px solid red; */
+  height: 40vh;
+  text-align: center;
+}
+
+.good_prompt {
+  font-size: 0.9rem;
+  width: 10rem;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.good_prompt:hover {
+  font-size: 0.97rem;
+  background-color: lightgreen;
+  color: #1b1b1b;
+}
+
+.bad_prompt {
+  font-size: 0.9rem;
+  width: 10rem;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 5px;
+}
+
+.bad_prompt:hover {
+  font-size: 0.97rem;
+  background-color: rgb(255, 103, 103);
+  color: #1b1b1b;
 }

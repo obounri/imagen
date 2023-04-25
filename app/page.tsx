@@ -126,14 +126,20 @@ export default function Home() {
     // <>
     // <head />
     <main className={styles.main}>
-      <h1>AI Art Generator ft. GPT, replicate/Openjourney</h1>
+      <h1>Imagen ft. GPT, replicate/Openjourney</h1>
 
       {generatedImage ? (
         <>
           <p>{formKeywords}</p>
           <article className={styles.article}>
             {generatedPrompt ? (
-              <p className={styles.generatedPrompt}>{generatedPrompt}</p>
+              <>
+                <div className={styles.text}>
+                  <p className={styles.generatedPrompt}>{generatedPrompt}</p>
+                  <button className={styles.good_prompt}>Good prompt</button>
+                  <button className={styles.bad_prompt}>Bad prompt</button>
+                </div>
+              </>
             ) : null}
             <Image
               className={styles.generatedImage}

@@ -44,7 +44,7 @@ export default async function handler(
       },
       {
         role: "assistant",
-        content: `Wide-angle shot of a grand mosque hall, vibrant stained glass windows casting colorful lightnto the ornate marble floors, warm and inviting lighting, captured with a high-resolution DSLR camera, reminiscent of Islamic architecture found in the Middle East, inspired by Islamic geometric patterns.`,
+        content: `Wide-angle shot of a grand mosque hall, vibrant stained glass windows casting colorful light into the ornate marble floors, warm and inviting lighting, captured with a high-resolution DSLR camera, reminiscent of Islamic architecture found in the Middle East, inspired by Islamic geometric patterns.`,
       },
       {
         role: "user",
