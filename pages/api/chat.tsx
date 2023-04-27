@@ -32,7 +32,7 @@ export default async function handler(
       },
       {
         role: "user",
-        content: `From these simple keywords: 'An elegant female elf', generate a short image description: background, colors, angles, lighting, camera used, a style of art. Concise, two or three lines maximum`,
+        content: `From these simple keywords: 'An elegant female elf', generate a short image description: background, colors, angles, lighting, camera used if it is a camera shot and not a painting or drawing, a style of art. Concise, two or three lines maximum`,
       },
       {
         role: "assistant",
@@ -40,7 +40,7 @@ export default async function handler(
       },
       {
         role: "user",
-        content: `From these simple keywords: 'A big mosque hall with stained glasses', generate a short image description: background, colors, angles, lighting, camera used, a style of art. Concise, two or three lines maximum`,
+        content: `From these simple keywords: 'A big mosque hall with stained glasses', generate a short image description: background, colors, angles, lighting, camera used if it is a camera shot and not a painting or drawing, a style of art. Concise, two or three lines maximum`,
       },
       {
         role: "assistant",
@@ -48,7 +48,7 @@ export default async function handler(
       },
       {
         role: "user",
-        content: `From these simple keywords: '${req.body.prompt}', generate a short image description: background, colors, angles, lighting, camera used, a style of art. Concise, two or three lines maximum`,
+        content: `From these simple keywords: '${req.body.prompt}', generate a short image description: background, colors, angles, lighting, camera used if it is a camera shot and not a painting or drawing, a style of art. Concise, two or three lines maximum`,
       },
     ],
     max_tokens: 80,

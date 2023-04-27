@@ -1,3 +1,4 @@
+
 .main {
   display: flex;
   flex-direction: column;
@@ -8,6 +9,15 @@
   /* border: 1px solid red; */
 }
 
+.pageTitle {
+  font-family: 'Orbitron', sans-serif;
+}
+
+.formKeywords {
+  font-family: 'Shadows Into Light', 'cursive';
+  font-size: 20px;
+}
+
 .article {
   display: flex;
   flex-direction: row;
@@ -16,7 +26,10 @@
   align-items: center;
   padding: 3rem;
   min-height: 50vh;
-  margin-top: 3rem;
+  margin-top: 1.3rem;
+  font-family: 'Antonio', sans-serif;
+  font-weight: 300;
+  font-size: 22px;
   /* border: 1px solid green; */
 }
 
@@ -31,15 +44,17 @@
 } */
 
 .regen {
-  width: 12rem;
+  width: 10rem;
   height: 2rem;
   border-radius: 5px;
   padding: 0.5rem;
   background-color: #f5f5f5;
   border: 1px solid #777777;
   color: #000;
+  font-family: 'Antonio', sans-serif;
   font-weight: 600;
   cursor: pointer;
+  transition: 0.3s;
 }
 
 .regen:hover {
@@ -53,7 +68,7 @@
   justify-content: space-evenly;
   align-items: center;
   width: 60%;
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   /* border: 1px solid red; */
 }
 
@@ -67,10 +82,22 @@
   text-align: center;
 }
 
+.ratePrompt {
+  display: flex;
+  /* border: 1px solid red; */
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 60%;
+  margin-top: 2.5rem;
+}
+
 .good_prompt {
+  font-family: 'Antonio', sans-serif;
+  font-weight: 600;
   font-size: 0.9rem;
-  width: 10rem;
-  height: 1.5rem;
+  width: 7rem;
+  height: 1.8rem;
   cursor: pointer;
   transition: 0.3s;
   border-radius: 5px;
@@ -83,9 +110,11 @@
 }
 
 .bad_prompt {
+  font-family: 'Antonio', sans-serif;
+  font-weight: 600;
   font-size: 0.9rem;
-  width: 10rem;
-  height: 1.5rem;
+  width: 7rem;
+  height: 1.8rem;
   cursor: pointer;
   transition: 0.3s;
   border-radius: 5px;
